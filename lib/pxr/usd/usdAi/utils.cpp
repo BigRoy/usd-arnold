@@ -22,7 +22,11 @@ UsdStageRefPtr UsdAiGetArnoldShaderDesc(const std::string& additionalFlags) {
     std::stringstream command;
     command << "usdAiShaderInfo --cout";
     if (!additionalFlags.empty()) { command << " " << additionalFlags; }
+#ifdef _WIN32
+    FILE* pipe = _popen(command.str().c_str(), "r");
+#else
     FILE* pipe = popen(command.str().c_str(), "r");
+#endif
     if (pipe != nullptr) {
         std::stringstream result;
         std::array<char, 4096> buffer = {0};
@@ -30,8 +34,12 @@ UsdStageRefPtr UsdAiGetArnoldShaderDesc(const std::string& additionalFlags) {
             if (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
                 result << buffer.data();
             }
-        }
-        pclose(pipe);
+        }  
+#ifdef _WIN32
+    _pclose(pipe);
+#else
+    pclose(pipe);
+#endif
         ret = UsdStage::CreateInMemory(".usda");
         ret->GetRootLayer()->ImportFromString(result.str());
     }
