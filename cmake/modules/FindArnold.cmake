@@ -41,22 +41,23 @@ if (EXISTS "$ENV{ARNOLD_HOME}")
 endif ()
 
 find_library(ARNOLD_LIBRARY
-             NAMES ai
-             PATHS ${ARNOLD_HOME}/bin
+             NAMES ai ai.lib
+             PATHS ${ARNOLD_HOME}/bin ${ARNOLD_HOME}/lib
              DOC "Arnold library")
 
 find_file(ARNOLD_KICK
-          names kick
+          names kick kick.exe
           PATHS ${ARNOLD_HOME}/bin
           DOC "Arnold kick executable")
 
+# Note: pykick is not available on Windows
 find_file(ARNOLD_PYKICK
           names pykick
           PATHS ${ARNOLD_HOME}/python/pykikc
           DOC "Arnold pykick executable")
 
 find_file(ARNOLD_MAKETX
-          names maketx
+          names maketx maketx.exe
           PATHS ${ARNOLD_HOME}/bin
           DOC "Arnold maketx executable")
 
@@ -69,7 +70,7 @@ find_path(ARNOLD_PYTHON_DIR arnold/ai_allocate.py
           DOC "Arnold python bindings path")
 
 find_file(ARNOLD_OSLC
-          names oslc
+          names oslc oslc.exe
           PATHS ${ARNOLD_HOME}/bin
           DOC "Arnold flavoured oslc")
 
